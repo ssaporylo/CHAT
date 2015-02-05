@@ -1,0 +1,9 @@
+User
+FOLDER CLIENT run client.py
+start client
+In the window need to set connection info host password and user name 
+
+Admin
+FOLDER SERVER - run interface_server.py
+start server
+In the window need to set server listening port 
