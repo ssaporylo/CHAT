@@ -28,13 +28,26 @@ class EchoClient(protocol.Protocol):
             data = data.split('@')
             interface.tex.user_field.delete("1.0", END)
             d = datetime.now()
-            message  = '{0}:{1}:{2}'.format(d.hour,d.minute,d.second) +  '@@' + data[0].strip() + '\n'
+            message  = '{0}:{1}:{2} {3}\n'.format(d.hour if len(str(d.hour))>1 else '0'+str(d.hour),
+                                            d.minute if len(str(d.minute))>1 else '0'+str(d.minute),
+                                            d.second if len(str(d.second))>1 else '0'+str(d.second),
+                                            data[0].strip())
             f = open('archive.txt', 'a')
             f.write('{0} {1}'.format(d.date(),message))
             f.close()
             users = data[1].strip() + '\n'
             interface.tex.user_field.insert(INSERT,users)
             interface.tex.text.insert(INSERT,message)
+            insert_row = int(float(interface.tex.text.index("end")))-2
+            try:
+                start = "{0}.{1}".format(str(insert_row),message.index('<'))
+                end = "{0}.{1}".format(str(insert_row),message.index('>')+1)
+                interface.tex.text.tag_add('text', start, end)
+            except ValueError, e:
+                start = "{0}.0".format(str(insert_row))
+                end = "{0}.{1}".format(str(insert_row),len(message))
+                interface.tex.text.tag_add('status', start, end)
+
 
     def connectionLost(self, reason):
         print reason.value

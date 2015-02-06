@@ -3,7 +3,7 @@ from twisted.internet.protocol import Factory
 from twisted.protocols.basic import LineReceiver
 from twisted.internet import reactor
 import sys
-import time
+
 
 class ChatProtocol(LineReceiver):
     def __init__(self, factory):
@@ -67,7 +67,7 @@ class ChatProtocol(LineReceiver):
             self._users(protocol)
 
     def _users(self,protocol):
-        users="@- {}".format('\n-'.join(self.factory.users.keys()))
+        users="@- {}".format('\n- '.join(self.factory.users.keys()))
         protocol.sendLine(users)
 
 class ChatFactory(Factory):

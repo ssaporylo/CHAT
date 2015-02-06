@@ -1,11 +1,3 @@
-# from Tkinter import *
-# import tkSimpleDialog
-# import urllib2
-# root = Tk()
-#
-# urltoopen = tkSimpleDialog.askstring('Address', 'Where do we get the pictures from?')
-# print urltoopen
-
 from Tkinter import *
 import socket
 import tkMessageBox

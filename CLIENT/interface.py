@@ -2,7 +2,7 @@ from Tkinter import *
 import socket
 import thread
 import pickle
-#from TWISTED.CHATprod.config import USER,IP_ADRESS,PORT
+
 with open('conf.pickle', 'rb') as handle:
   config = pickle.load(handle)
 
@@ -20,8 +20,8 @@ def _send_request(message):
 class Create_title(object):
      def __init__(self,root):
          self.frame = Frame(root)
-         self.label1 = Label(self.frame, text="Users",anchor='w', width = 15, font="Arial 14")
-         self.label2 = Label(self.frame, text="Messages", width = 40, font="Arial 14")
+         self.label1 = Label(self.frame, text="Users",anchor='w', width = 15, font="times 14")
+         self.label2 = Label(self.frame, text="Messages", width = 40, font="times 14")
          self.label1.pack(side=LEFT)
          self.label2.pack(side=RIGHT, expand=YES, fill=X)
          self.frame.pack(side=TOP, fill=X)
@@ -29,10 +29,12 @@ class Create_title(object):
 class Create_chat_fields(object):
      def __init__(self,root):
          self.frame = Frame(root)
-         self.user_field = Text(self.frame, width=15, height=20,background='#3399ff', font="Arial 11")
-         self.text = Text(self.frame,width=60,height= 20,insertwidth=0,background='gray',font="Arial 11")
+         self.user_field = Text(self.frame, width=15, height=20,background='#3399ff', font="times 11")
+         self.text = Text(self.frame,width=60,height= 20,insertwidth=0,background='gray',font="times 11")
          self.scrl = Scrollbar(self.frame, command=self.text.yview)
          self.text.config(yscrollcommand=self.scrl.set)
+         self.text.tag_config('text', font=('times', 11, 'underline'))
+         self.text.tag_config('status', font=('times', 11, 'bold'))
          self.user_field.pack(side=LEFT)
          self.text.pack(side=LEFT, expand=True, fill=X)
          self.scrl.pack(side=LEFT,fill=Y)
