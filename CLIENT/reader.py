@@ -48,6 +48,8 @@ class EchoClient(protocol.Protocol):
                 end = "{0}.{1}".format(str(insert_row),len(message))
                 interface.tex.text.tag_add('status', start, end)
 
+            interface.tex.text.yview(END)
+
 
     def connectionLost(self, reason):
         print reason.value

@@ -58,15 +58,24 @@ class Create_form(object):
           self.lab = Button(self.row, height=3, text="Send", command= self.fetch)
           self.ent = Text(self.row,background='#e7e037', height = 3)
           self.row.pack(side=TOP, fill=X)
+
+          self.ent.bind('<Return>', self.unbindevent)
           self.ent.bind('<Return>', self.fetch)
           self.ent.pack(side=LEFT, expand=YES, fill=X)
           self.lab.pack(side=RIGHT)
 
      def fetch(self,event=False):
-          message = 'MESSAGE@<{0}> {1}'.format(config["USER"],self.ent.get('1.0', END))
+
+          data =''.join([i for i in self.ent.get('1.0', END).split('\n') if i.strip !=''])
+          message = 'MESSAGE@<{0}> {1}'.format(config["USER"],data)
           self.ent.delete("1.0", END)
+          self.ent.focus_set()
+          self.lab.focus_set()
+          self.ent.focus_set()
           _send_request(message)
 
+     def unbindevent(self, event):
+         return 'break'
 
 
 def handler_exit():

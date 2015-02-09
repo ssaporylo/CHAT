@@ -60,8 +60,6 @@ class ChatProtocol(LineReceiver):
         self.broadcastMessage(message)
 
     def broadcastMessage(self, message):
-
-
         for protocol in self.factory.users.values():
             protocol.sendLine(message)
             self._users(protocol)
