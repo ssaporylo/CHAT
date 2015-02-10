@@ -30,12 +30,16 @@ class Create_chat_fields(object):
      def __init__(self,root):
          self.frame = Frame(root)
          self.user_field = Text(self.frame, width=15, height=20,background='#3399ff', font="times 11")
+         self.scrl_user = Scrollbar(self.frame, command=self.user_field.yview)
+         self.user_field.config(yscrollcommand=self.scrl_user.set)
          self.text = Text(self.frame,width=60,height= 20,insertwidth=0,background='gray',font="times 11")
          self.scrl = Scrollbar(self.frame, command=self.text.yview)
+         self.write_history(self.text, self.scrl)
          self.text.config(yscrollcommand=self.scrl.set)
          self.text.tag_config('text', font=('times', 11, 'underline'))
          self.text.tag_config('status', font=('times', 11, 'bold'))
          self.user_field.pack(side=LEFT)
+         self.scrl_user.pack(side=LEFT,fill=Y)
          self.text.pack(side=LEFT, expand=True, fill=X)
          self.scrl.pack(side=LEFT,fill=Y)
          self.frame.pack(side=TOP, fill=X, expand =True)
@@ -44,6 +48,20 @@ class Create_chat_fields(object):
          for i in events:
              self.text.bind(i,self.unbindevent)
              self.user_field.bind(i,self.unbindevent)
+
+     def write_history(self, text, scrl):
+         f = open('archive.txt', 'r')
+         for message in f.readlines():
+             text.insert(INSERT,message)
+             insert_row = int(float(text.index("end")))-2
+             try:
+                start = "{0}.{1}".format(str(insert_row),message.index('<'))
+                end = "{0}.{1}".format(str(insert_row),message.index('>')+1)
+                text.tag_add('text', start, end)
+             except ValueError, e:
+                start = "{0}.0".format(str(insert_row))
+                end = "{0}.{1}".format(str(insert_row),len(message))
+                text.tag_add('status', start, end)
 
      def unbindevent(self, event):
          return 'break'

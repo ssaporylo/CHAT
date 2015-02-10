@@ -36,6 +36,7 @@ class EchoClient(protocol.Protocol):
             f.write('{0} {1}'.format(d.date(),message))
             f.close()
             users = data[1].strip() + '\n'
+
             interface.tex.user_field.insert(INSERT,users)
             interface.tex.text.insert(INSERT,message)
             insert_row = int(float(interface.tex.text.index("end")))-2
@@ -49,7 +50,7 @@ class EchoClient(protocol.Protocol):
                 interface.tex.text.tag_add('status', start, end)
 
             interface.tex.text.yview(END)
-
+            interface.tex.user_field.yview(END)
 
     def connectionLost(self, reason):
         print reason.value
