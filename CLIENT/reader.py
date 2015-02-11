@@ -19,7 +19,7 @@ class EchoClient(protocol.Protocol):
         self.transport.write("UPDATE_SESSION@{}".format(config["USER"]))
 
     def dataReceived(self, data):
-        print data,'*****'
+
         if data.strip() in '<//KILL_READER//>':
             self.transport.loseConnection()
         else:

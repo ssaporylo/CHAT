@@ -11,11 +11,13 @@ class ChatProtocol(LineReceiver):
 
     def connectionMade(self):
         pass
+
     def dataReceived(self, data):
         self.lineReceived(data.strip())
 
     def connectionLost(self, reason):
         pass
+
     def lineReceived(self, line):
 
         if "REGISTER@" in line:
@@ -38,7 +40,6 @@ class ChatProtocol(LineReceiver):
             return False
         return True
 
-
     def handle_REGISTER(self, line):
         user = line.split("@")[1]
         message = "{} joined to chat".format(user)
@@ -47,14 +48,13 @@ class ChatProtocol(LineReceiver):
         self.factory.users[user]= self
 
     def handle_DELETE(self,line):
-        #print line
+
         user = line.split("@")[1]
         message = "{} left chat".format(user)
 
         self.factory.users[user].sendLine('<//KILL_READER//>')
         del self.factory.users[user]
         self.broadcastMessage(message)
-
 
     def handle_CHAT(self, message):
         self.broadcastMessage(message)
@@ -69,8 +69,10 @@ class ChatProtocol(LineReceiver):
         protocol.sendLine(users)
 
 class ChatFactory(Factory):
+
     def __init__(self):
         self.users = {}
+
     def buildProtocol(self, addr):
         return ChatProtocol(self)
 
