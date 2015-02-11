@@ -73,6 +73,7 @@ class Create_form(object):
      def __init__(self, root, tex):
           self.tex = tex
           self.row = Frame(root)
+          self.clear = Button(self.row, height=3, text="Clear history", command= self.clear_history)
           self.lab = Button(self.row, height=3, text="Send", command= self.fetch)
           self.ent = Text(self.row,background='#e7e037', height = 3)
           self.row.pack(side=TOP, fill=X)
@@ -80,7 +81,9 @@ class Create_form(object):
           self.ent.bind('<Return>', self.unbindevent)
           self.ent.bind('<Return>', self.fetch)
           self.ent.pack(side=LEFT, expand=YES, fill=X)
-          self.lab.pack(side=RIGHT)
+          self.lab.pack(side=LEFT)
+          self.clear.pack(side=RIGHT)
+
 
      def fetch(self,event=False):
 
@@ -94,6 +97,10 @@ class Create_form(object):
 
      def unbindevent(self, event):
          return 'break'
+
+     def clear_history(self):
+         open("archive.txt","w").close()
+         self.tex.text.delete("1.0", END)
 
 
 def handler_exit():

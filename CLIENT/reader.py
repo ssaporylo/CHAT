@@ -1,9 +1,7 @@
 import thread
 from twisted.internet import reactor, protocol
 from datetime import *
-
 import interface
-#from TWISTED.CHATprod.config import USER,IP_ADRESS,PORT
 from Tkinter import *
 import time
 import pickle

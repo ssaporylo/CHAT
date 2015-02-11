@@ -2,39 +2,56 @@ from Tkinter import *
 import tkMessageBox
 from multiprocessing import Process
 import os
+import thread
+import socket
+
 fields = ["Port"]
 
-def fetch(entries):
-    TCP_PORT = int(entries[0].get())
+class Create_interface(object):
+    def __init__(self, field, root):
+        self.root =root
+        self.root.protocol("WM_DELETE_WINDOW", self.quit)
+        self.label = Label(self.root, text="Enter connection data",font="Arial 13")
+        self.label.pack(side=TOP,fill=X)
+        self.entries = self.makeform(field)
+        self.enter = Button(self.root, text="Enter", command=self.fetch)
+        self.enter.pack(side=LEFT)
+        self.close = Button(self.root, text="Quit", command = self.quit).pack(side=RIGHT)
+        self.processes = []
 
-    try:
-         p = Process(target=os.system, args=("python server.py {}".format(TCP_PORT),))
-         p.start()
-         root.destroy()
-    except Exception, e:
-        tkMessageBox.showerror('Error', e.strerror)
+    def makeform(self,fields):
+        entries = []
+        for field in fields:
+            row = Frame(self.root)
+            lab = Label(row, width=5, text=field)
+            ent = Entry(row)
+            row.pack(side=TOP, fill=X)
+            lab.pack(side=LEFT)
+            ent.pack(side=RIGHT, expand=YES, fill=X)
+            entries.append(ent)
+        return entries
 
-def quit(entries):
-    root.destroy()
+    def fetch(self):
+        try:
+            TCP_PORT = int(self.entries[0].get())
+            s=socket.socket()
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+            s.bind(("localhost", TCP_PORT))
+            global p
+            p = Process(target=os.system, args=("python server.py {}".format(TCP_PORT),))
+            p.start()
+            self.processes.append(p.pid)
+            tkMessageBox.showinfo('Running', 'Server started on port {}'.format(TCP_PORT))
 
+        except Exception, e:
+            tkMessageBox.showerror('Error', e)
 
-def makeform(root, fields):
-    entries = []
-    for field in fields:
-        row = Frame(root)
-        lab = Label(row, width=5, text=field)
-        ent = Entry(row)
-        row.pack(side=TOP, fill=X)
-        lab.pack(side=LEFT)
-        ent.pack(side=RIGHT, expand=YES, fill=X)
-        entries.append(ent)
-    return entries
+    def quit(self):
+        for p in self.processes:
+            print p
+            thread.start_new_thread(os.kill,(p,9))
+        root.destroy()
 
 root = Tk()
-label = Label(root, text="Enter connection data",font="Arial 13")
-label.pack(side=TOP,fill=X)
-ents = makeform(root, fields)
-root.bind("<Return>", (lambda event: fetch(ents)))
-Button(root, text="Enter", command = (lambda: fetch(ents))).pack(side=LEFT)
-Button(root, text="Quit", command = (lambda: quit(ents))).pack(side=RIGHT)
+Create_interface(fields, root)
 root.mainloop()
