@@ -50,7 +50,10 @@ class Create_chat_fields(object):
             self.user_field.bind(i,self.unbindevent)
 
     def write_history(self, text, scrl):
-        f = open('archive.txt', 'r')
+        try:
+            f = open('archive.txt', 'r')
+        except Exception ,e:
+            return
         for message in f.readlines():
             text.insert(INSERT,message)
             insert_row = int(float(text.index("end")))-2
